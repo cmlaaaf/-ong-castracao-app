@@ -24,21 +24,27 @@ jobs:
     - name: Install dependencies
       run: flutter pub get
     
-    - name: Build iOS app (no codesign)
+    - name: Build iOS without signing
       run: |
         flutter build ios --release --no-codesign
     
-    - name: Create IPA
+    - name: Setup Xcode
+      run: |
+        sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+        sudo xcodebuild -license accept
+    
+    - name: Create unsigned IPA
       run: |
         cd build/ios/iphoneos
-        mkdir Payload
+        mkdir -p Payload
         cp -r Runner.app Payload/
-        zip -r app-release.ipa Payload
-        rm -rf Payload
+        zip -r -y ../../../app-release-unsigned.ipa Payload
+        cd ../../..
+        ls -la app-release-unsigned.ipa
     
     - name: Upload IPA artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ios-app-release
-        path: build/ios/iphoneos/app-release.ipa
+        name: ios-app-release-unsigned
+        path: app-release-unsigned.ipa
         retention-days: 30
