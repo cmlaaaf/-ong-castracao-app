@@ -141,13 +141,6 @@ class _AnimalListScreenState extends State<AnimalListScreen> {
         ),
         foregroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: 'Cadastrar Animal sem Dono',
-            onPressed: _navigateToAddAnimal,
-          ),
-        ],
       ),
       body: Column(
         children: [
