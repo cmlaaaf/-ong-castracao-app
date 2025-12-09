@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/animal.dart';
 import '../models/responsavel.dart';
 import '../models/voluntario.dart';
@@ -28,10 +29,18 @@ class DatabaseHelper {
 
   /// Inicializa o banco de dados
   Future<Database> _initDatabase() async {
-    // Para web, usar banco em memória
     print('Abrindo banco de dados...');
+    
+    // Para web, usar nome simples. Para mobile/desktop, usar path completo
+    String dbPath;
+    if (kIsWeb) {
+      dbPath = 'ong_castracao.db';
+    } else {
+      dbPath = 'ong_castracao.db';
+    }
+    
     final db = await openDatabase(
-      'ong_castracao.db',
+      dbPath,
       version: 2,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,

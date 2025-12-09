@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite/sqflite.dart';
+import 'dart:io' show Platform;
 import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Inicializar o banco de dados para web
+  // Inicializar o banco de dados para cada plataforma
   if (kIsWeb) {
+    // Web
     databaseFactory = databaseFactoryFfiWeb;
+  } else if (Platform.isWindows || Platform.isLinux) {
+    // Windows e Linux
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
   }
+  // Android e iOS usam sqflite nativo (padrão)
   
   runApp(const MyApp());
 }
